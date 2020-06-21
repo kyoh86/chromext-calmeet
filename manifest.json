@@ -7,17 +7,28 @@
     "default_title": "Calmeet"
   },
   "permissions": [
-    "identity"
+    "storage",
+    "identity",
+    "identity.email"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "css": [],
+      "js": ["message.js", "oauth.js", "cal.js", "meet.js", "content_script.js"]
+    }
   ],
   "background": {
     "scripts": [
+      "message.js",
+      "oauth.js",
       "background.js"
     ],
     "persistent": false
   },
   "oauth2": {
     "client_id": "869566238352-d31qsj6o59hdt6bsmd6d458rv5le2suk.apps.googleusercontent.com",
-    "scopes": ["https://www.googleapis.com/auth/calendar.readonly"]
+    "scopes": ["https://www.googleapis.com/auth/calendar"]
   },
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiQzOn14AiL8IOBFIeEXw1Bm42eAn1PjRC82eWDClwJkKD5GytrglHbvppyN4eM/JHwOSpDfnF6aE+ki+zf4Zwai24nCzQRD0oqV4IHskEfzPLtBafwbSJ7TXiAXG2iuTjR+jU4M0DUttSNsiDS2ptasadCaEjmuIIUF4UCCZn4lHGcn8+LDyUgdPPMLyj0GbFzpJfPPbQ6bT8gQxN6kO4hiv0IPCr42mqbrBBjn/BPFPeMQtvRShsm4qmFeAVA1SzkSbJewDgenA0mgN5w4VaAzWrnzbwloBAr5tbUKg802CPB2BvrGQPuHgOE406DcgW6sQP/3LI3uCfso4qwtvuwIDAQAB"
 }

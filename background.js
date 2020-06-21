@@ -7,3 +7,36 @@
 chrome.browserAction.onClicked.addListener(function() {
   chrome.tabs.create({url: 'index.html'});
 });
+
+chrome.identity.getProfileUserInfo(profile => {
+  if (profile.email) {
+    chrome.storage.sync.set(profile);
+  }
+});
+
+let authToken = null;
+
+chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
+  switch (message.method) {
+    case methodStoreAuthToken:
+      authToken = message.payload.authToken;
+    case methodGetAuthToken:
+      if (authToken) {
+        sendResponse({authToken: authToken});
+        return true;
+      } else {
+        authorize()
+        .catch(err => {
+          console.debug(err);
+        })
+        .then(token => {
+          if (token) {
+            authToken = token;
+          }
+          sendResponse({authToken: authToken});
+        });
+        return true;
+      }
+  }
+  return false;
+});

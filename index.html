@@ -2,16 +2,21 @@
    <head>
      <title>Calmeet</title>
      <style>
-       button {
+       .authorize-button {
          padding: 10px;
          background-color: #3C79F8;
+         color: #cceeee;
          display: inline-block;
+         border: none;
        }
      </style>
+     <script type="text/javascript" src="message.js"></script>
      <script type="text/javascript" src="oauth.js"></script>
+     <script type="text/javascript" src="index.js"></script>
    </head>
    <body>
-     <button>Calendars</button>
-     <pre id="events-tryout"></pre>
+     <h2>認証</h2>
+     <div class="authorize-status"></div>
+     <button class="authorize-button">認証</button>
    </body>
  </html>
