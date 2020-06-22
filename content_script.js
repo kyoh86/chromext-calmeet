@@ -1,7 +1,8 @@
 function attending() {
   return new Promise((resolve, _) => {
-    const timer = setInterval(() => {
-      if (!inRoom()) {
+    const timer = setInterval(async function() {
+      let inr = await inRoom();
+      if (!inr) {
         console.debug('not in a room');
         return;
       }
@@ -18,36 +19,40 @@ function attending() {
 
 function pinging(email, calendarId = 'primary') {
   return new Promise(function (resolve, _) {
-    if (!inRoom()) {
-      console.debug('exited a room');
-      resolve();
-      return;
-    }
-    if (!isAttending()) {
-      console.debug('leaved from a meeting');
-      resolve();
-      return;
-    }
+    const repeat = async function() {
+      let inr = await inRoom();
+      if (!inr) {
+        console.debug('exited a room');
+        resolve();
+        return;
+      }
+      if (!isAttending()) {
+        console.debug('leaved from a meeting');
+        resolve();
+        return;
+      }
 
-    // ping.
-    ping(email, calendarId)
-    .then(() => {
-      console.log('ping!');
-    })
-    .catch(err => {
-      console.error(err);
-      // TODO: interactive button / notification?
-    })
-    .then(() => {
-      setTimeout(this, 60000); // 1 minute
-    });
+      // ping.
+      ping(email, calendarId)
+      .then(() => {
+        console.log('ping!');
+      })
+      .catch(err => {
+        console.error(err);
+        // TODO: interactive button / notification?
+      })
+      .then(() => {
+        setTimeout(repeat, 60000); // 1 minute
+      });
+    };
+    repeat();
   });
 }
 
 async function ping(email, calendarId = 'primary') {
   const token = await getAuthToken();
-  const meetId = getMeetId();
-  const event = getMeetEvent(token, meetId);
+  const meetId = await getMeetId();
+  const event = await getMeetEvent(token, meetId);
   const now = new Date();
 
   let init = {
@@ -55,14 +60,14 @@ async function ping(email, calendarId = 'primary') {
     async: true,
     headers: {
       Authorization: 'Bearer ' + token,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json; charset=utf-8'
     },
     'contentType': 'json',
-    body: {
+    body: JSON.stringify({
       'extendedProperties': {
-        'shared': buildPingObject(now, email)
+        'shared': buildPingObject(email, now)
       }
-    },
+    }),
   };
 
   let url = 'https://www.googleapis.com/calendar/v3/calendars/'
@@ -73,13 +78,10 @@ async function ping(email, calendarId = 'primary') {
   await fetch(url, init);
 }
 
-function buildPingObject(now, email) {
-  let obj = {ping: now}
+function buildPingObject(email, now) {
   let myObj = {};
-  myObj[email] = obj;
-  let pingObj = {};
-  pingObj['calmeet.kyoh86.dev'] = myObj;
-  return pingObj;
+  myObj[email] = now.getTime();
+  return myObj;
 }
 
 window.onload = async function() {

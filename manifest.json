@@ -3,10 +3,13 @@
   "version": "1.0",
   "description": "Listup unmatched guests from Calendar to Meet.",
   "manifest_version": 2,
-  "browser_action": {
-    "default_title": "Calmeet"
+  "page_action": {
+    "default_title": "Calmeet",
+    "default_popup": "popup.html"
   },
   "permissions": [
+    "tabs",
+    "declarativeContent",
     "storage",
     "identity",
     "identity.email"

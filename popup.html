@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Calmeet</title>
+    <style>
+.authorize-status {
+  display: inline-block;
+}
+.authorize-button {
+  padding: 10px;
+  background-color: #3C79F8;
+  color: #cceeee;
+  display: inline-block;
+  border: none;
+}
+    </style>
+    <script type="text/javascript" src="message.js"></script>
+    <script type="text/javascript" src="oauth.js"></script>
+    <script type="text/javascript" src="cal.js"></script>
+    <script type="text/javascript" src="meet.js"></script>
+    <script type="text/javascript" src="popup.js"></script>
+  </head>
+  <body>
+    <h2>Authorization</h2>
+    <div class="authorization">
+      <div class="authorize-status"></div>
+      <button class="authorize-button">Authorize</button>
+    </div>
+    <h2>Members</h2>
+    <button class="take-attendance-button">🔄</button>
+    <div class="members">
+      <h3>Unknown</h3>
+      <ul class="unknown-members"></ul>
+      <h3>Living</h3>
+      <ul class="living-members"></ul>
+    </div>
+  </body>
+</html>
